@@ -45,3 +45,19 @@ We have detected unusually high spending on your card in these categories:
 Love,
 
 The Credit Card Company
+
+
+## Thought process
+- we have to compare how much the user spent previous month and the current month
+- it will be compared according to the categories
+- sending an alert only if the user has spent 50% more than the last month
+- Eg:
+    - Jan: User spent 100 rupees for Entertainment category
+    - February : 160, which is 50% more ie 100+(50% of 100) = 150, so if it is more than 150 then it will send an email
+
+### Creation of classes
+- A class which sends email
+- A class which has the responsibility to compare the price from previous month
+- A Payment class which has price, description, cateogy
+- A Category enum class
+- Something which is known as a user which has userId
