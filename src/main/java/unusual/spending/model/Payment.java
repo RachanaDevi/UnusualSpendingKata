@@ -1,5 +1,6 @@
 package unusual.spending.model;
 
+import java.time.Month;
 import java.util.Objects;
 
 public class Payment {
@@ -7,19 +8,19 @@ public class Payment {
     private final Double price;
     private final String description;
     private final String category;
-    private final String month;
+    private final Month month;
 
     public Payment(Double price,
                    String description,
                    String category,
-                   String month) {
+                   Month month) {
         this.price = price;
         this.description = description;
         this.category = category;
         this.month = month;
     }
 
-    public String month() {
+    public Month month() {
         return month;
     }
 
