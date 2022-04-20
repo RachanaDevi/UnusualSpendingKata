@@ -1,5 +1,7 @@
 package unusual.spending.model;
 
+import java.time.Clock;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +19,12 @@ public class Payments {
     }
 
     public Double currentMonth() {
-//        String currentMonthOther = LocalDate.now().getMonth().toString();
-        Month currentMonth = Month.APRIL;
+        Month currentMonth = LocalDate.now(Clock.systemDefaultZone()).getMonth();
         return totalPaymentsMadeIn(currentMonth);
     }
 
-
     public Double previousMonth() {
-//        String previousMonth = LocalDate.now().getMonth().minus(1L).toString();
-        Month previousMonth = Month.MARCH;
+        Month previousMonth = LocalDate.now(Clock.systemDefaultZone()).getMonth().minus(1L);
         return totalPaymentsMadeIn(previousMonth);
     }
 
