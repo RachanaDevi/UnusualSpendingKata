@@ -1,6 +1,7 @@
 package unusual.spending;
 
 import org.junit.jupiter.api.Test;
+import unusual.spending.model.Category;
 import unusual.spending.model.Payment;
 import unusual.spending.model.Payments;
 import unusual.spending.model.User;
@@ -15,9 +16,10 @@ class TriggersUnusualSpendingEmailUnitTest {
         TriggersUnusualSpendingEmail triggersUnusualSpendingEmail = new TriggersUnusualSpendingEmail();
         User user = new User(10L,
                 new Payments(
-                        List.of(new Payment(10.0, "description", "golf", Month.MARCH),
-                                new Payment(10.0, "description", "golf", Month.APRIL))
+                        List.of(new Payment(10.0, "description", Category.GOLF, Month.MARCH),
+                                new Payment(10.0, "description", Category.GOLF, Month.APRIL))
                 ));
         triggersUnusualSpendingEmail.trigger(user);
+
     }
 }

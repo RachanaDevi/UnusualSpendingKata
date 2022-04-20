@@ -7,12 +7,12 @@ public class Payment {
 
     private final Double price;
     private final String description;
-    private final String category;
+    private final Category category;
     private final Month month;
 
     public Payment(Double price,
                    String description,
-                   String category,
+                   Category category,
                    Month month) {
         this.price = price;
         this.description = description;

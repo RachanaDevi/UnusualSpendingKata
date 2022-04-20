@@ -11,14 +11,14 @@ class PaymentsUnitTest {
 
     @Test
     void shouldReturnPaymentForCurrentMonth() {
-        Payments payments = new Payments(List.of(new Payment(150.0, "description", "golf", Month.APRIL)));
+        Payments payments = new Payments(List.of(new Payment(150.0, "description", Category.GOLF, Month.APRIL)));
 
         assertEquals(payments.currentMonth(), 150.0, 0);
     }
 
     @Test
     void shouldReturnPaymentForPreviousMonth() {
-        Payments payments = new Payments(List.of(new Payment(100.0, "description", "golf", Month.MARCH)));
+        Payments payments = new Payments(List.of(new Payment(100.0, "description", Category.GOLF, Month.MARCH)));
 
         assertEquals(payments.previousMonth(), 100.0, 0);
     }
