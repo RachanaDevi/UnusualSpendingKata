@@ -1,33 +1,43 @@
 package unusual.spending.model;
 
+import java.time.Clock;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class User {
     private final Long id;
     private final Payments payments;
 
+    private final Clock clock;
+
     public User(Long id, Payments payments) {
         this.id = id;
         this.payments = payments;
+        this.clock = Clock.systemDefaultZone();
     }
 
-    public Map<Category, Double> unusualSpending() {
+    User(Long id, Payments payments, Clock clock) {
+        this.id = id;
+        this.payments = payments;
+        this.clock = clock;
+    }
+
+    public Map<Category, Double> unusualSpendings() {
         Map<Category, Double> unusualCategoryPrices = new HashMap<>();
-        Set<Category> currentMonthCategories = Stream.of(payments.currentMonthCategoryPaymentsMapping()).flatMap(map -> map.keySet().stream()).collect(Collectors.toSet());
-        Set<Category> previousMonthCategories = Stream.of(payments.previousMonthCategoryPaymentsMapping()).flatMap(map -> map.keySet().stream()).collect(Collectors.toSet());
+        Set<Category> currentMonthCategories = payments.categoriesUsedInMonth(currentMonth());
+        Set<Category> previousMonthCategories = payments.categoriesUsedInMonth(previousMonth());
         Set<Category> categoryIntersection = new HashSet<>(currentMonthCategories);
         categoryIntersection.retainAll(previousMonthCategories);
         if (categoryIntersection.isEmpty()) {
             return Collections.emptyMap();
         }
         for (Category category : currentMonthCategories) {
-            Double currentMonthPrice = payments.currentMonthCategoryPaymentsMapping().get(category)
+            Double currentMonthPrice = payments.categoryToPaymentsMapping(currentMonth()).get(category)
                     .stream().map(Payment::price)
                     .reduce(Double::sum).get();
 
-            Double previousMonthPrice = payments.previousMonthCategoryPaymentsMapping().get(category)
+            Double previousMonthPrice = payments.categoryToPaymentsMapping(previousMonth()).get(category)
                     .stream().map(Payment::price)
                     .reduce(Double::sum).get();
             if ((((currentMonthPrice - previousMonthPrice) * 100) / previousMonthPrice) > 50) {
@@ -35,5 +45,13 @@ public class User {
             }
         }
         return unusualCategoryPrices;
+    }
+
+    private Month currentMonth() {
+        return LocalDate.now(this.clock).getMonth();
+    }
+
+    private Month previousMonth() {
+        return LocalDate.now(this.clock).getMonth().minus(1L);
     }
 }

@@ -20,10 +20,9 @@ class UserUnitTest {
                 new Payment(50.0, "description", Category.GOLF, Month.MARCH),
                 new Payment(50.0, "description", Category.GOLF, Month.MARCH),
                 new Payment(100.0, "description", Category.GOLF, Month.APRIL),
-                new Payment(60.0, "description", Category.GOLF, Month.APRIL)), mockClock));
+                new Payment(60.0, "description", Category.GOLF, Month.APRIL))), mockClock);
 
-        Assertions.assertEquals(Map.of(Category.GOLF, 160.0), user.unusualSpending());
-//        Assertions.assertT();
+        Assertions.assertEquals(Map.of(Category.GOLF, 160.0), user.unusualSpendings());
     }
 
     @Test
@@ -31,17 +30,17 @@ class UserUnitTest {
         User user = new User(10L, new Payments(List.of(
                 new Payment(50.0, "description", Category.GOLF, Month.MARCH),
                 new Payment(50.0, "description", Category.GOLF, Month.MARCH),
-                new Payment(5.0, "description", Category.GOLF, Month.APRIL)), mockClock));
+                new Payment(5.0, "description", Category.GOLF, Month.APRIL))), mockClock);
 
-        Assertions.assertEquals(Collections.emptyMap(), user.unusualSpending());
+        Assertions.assertEquals(Collections.emptyMap(), user.unusualSpendings());
     }
 
     @Test
     void shouldReturnFalseIfTheUserSpentSameAmountOfMoneyInBothMonths() {
         User user = new User(10L, new Payments(List.of(
                 new Payment(50.0, "description", Category.GOLF, Month.MARCH),
-                new Payment(50.0, "description", Category.GOLF, Month.APRIL)), mockClock));
+                new Payment(50.0, "description", Category.GOLF, Month.APRIL))), mockClock);
 
-        Assertions.assertEquals(Collections.emptyMap(), user.unusualSpending());
+        Assertions.assertEquals(Collections.emptyMap(), user.unusualSpendings());
     }
 }

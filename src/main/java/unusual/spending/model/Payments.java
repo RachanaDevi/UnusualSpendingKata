@@ -1,7 +1,5 @@
 package unusual.spending.model;
 
-import java.time.Clock;
-import java.time.LocalDate;
 import java.time.Month;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,41 +8,19 @@ import java.util.stream.Stream;
 public class Payments {
 
     private final List<Payment> paymentList;
-    private final Clock clock;
 
     public Payments(List<Payment> paymentList) {
         this.paymentList = paymentList;
-        clock = Clock.systemDefaultZone();
     }
 
-    Payments(List<Payment> paymentList, Clock clock) {
-        this.paymentList = paymentList;
-        this.clock = clock;
+    public Set<Category> categoriesUsedInMonth(Month month) {
+        return Stream.of(this.categoryToPaymentsMapping(month)).flatMap(map -> map.keySet().stream()).collect(Collectors.toSet());
     }
 
-    public Payments currentMonth() {
-        Month currentMonth = LocalDate.now(this.clock).getMonth();
-        return totalPaymentsMadeIn(currentMonth);
-    }
-
-    public Payments previousMonth() {
-        Month previousMonth = LocalDate.now(this.clock).getMonth().minus(1L);
-        return totalPaymentsMadeIn(previousMonth);
-    }
-
-    public Map<Category, Payments> currentMonthCategoryPaymentsMapping() {
-        Payments paymentsInCurrentMonth = currentMonth();
-        return categoryToPaymentMapFor(paymentsInCurrentMonth);
-    }
-
-    public Map<Category, Payments> previousMonthCategoryPaymentsMapping() {
-        Payments paymentsInCurrentMonth = previousMonth();
-        return categoryToPaymentMapFor(paymentsInCurrentMonth);
-    }
-
-    private HashMap<Category, Payments> categoryToPaymentMapFor(Payments paymentsInCurrentMonth) {
+    public Map<Category, Payments> categoryToPaymentsMapping(Month month) {
         HashMap<Category, Payments> categoryPaymentsMapping = new HashMap<>();
-        for (Payment payment : paymentsInCurrentMonth.stream().toList()) {
+        Payments monthPayments = totalPaymentsMadeIn(month);
+        for (Payment payment : monthPayments.stream().toList()) {
             if (categoryPaymentsMapping.containsKey(payment.category())) {
                 categoryPaymentsMapping.get(payment.category()).paymentList.add(payment);
             } else {
