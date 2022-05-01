@@ -63,7 +63,7 @@ public class Payments {
     private Payments totalPaymentsMadeIn(Month currentMonth) {
         List<Payment> paymentsMadeInMonth = paymentList
                 .stream()
-                .filter(payment -> payment.month().equals(currentMonth))
+                .filter(payment -> payment.madeInMonth(currentMonth))
                 .collect(Collectors.toList());
         return new Payments(paymentsMadeInMonth);
     }

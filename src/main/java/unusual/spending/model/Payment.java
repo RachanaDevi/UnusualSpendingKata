@@ -20,8 +20,8 @@ public class Payment {
         this.month = month;
     }
 
-    public Month month() {
-        return month;
+    public boolean madeInMonth(Month month) {
+        return this.month.equals(month);
     }
 
     public Double price() {
