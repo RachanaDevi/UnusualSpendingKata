@@ -1,11 +1,14 @@
 package unusual.spending.model;
 
 import org.junit.jupiter.api.Test;
+import unusual.spending.CategoryPaymentsMapping;
 import unusual.spending.fixture.MockClock;
 
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -49,7 +52,7 @@ class PaymentsUnitTest {
                 Category.ENTERTAINMENT, entertainmentPaymentsInCurrentMonth
         );
 
-        assertEquals(expectedCategoryPaymentsMapping, payments.categoryToPaymentsMapping(currentMonth));
+        assertEquals(CategoryPaymentsMapping.from(expectedCategoryPaymentsMapping), payments.categoryToPaymentsMapping(currentMonth));
     }
 
     @Test
@@ -73,6 +76,26 @@ class PaymentsUnitTest {
                 Category.GOLF, golfPaymentsInCurrentMonth
         );
 
-        assertEquals(expectedCategoryPaymentsMapping, payments.categoryToPaymentsMapping(previousMonth));
+        assertEquals(CategoryPaymentsMapping.from(expectedCategoryPaymentsMapping), payments.categoryToPaymentsMapping(previousMonth));
+    }
+
+    @Test
+    void shouldReturnEmptyCategoryAndPaymentsMappingForGivenMonthWhereNoPaymentsWhereMade() {
+        Month noPaymentsMonth = Month.DECEMBER;
+        Payments payments = new Payments(List.of(
+                new Payment(100.0, "description", Category.GOLF, Month.MARCH),
+                new Payment(150.0, "description", Category.GOLF, Month.APRIL)
+        ));
+
+        assertEquals(CategoryPaymentsMapping.from(Collections.emptyMap()), payments.categoryToPaymentsMapping(noPaymentsMonth));
+    }
+
+    @Test
+    void shouldAddPaymentInPayments() {
+        Payments payments = new Payments(new ArrayList<>());
+
+        payments.add(new Payment(100.0, "description", Category.GOLF, Month.MARCH));
+
+        assertEquals(payments.stream().count(), 1);
     }
 }

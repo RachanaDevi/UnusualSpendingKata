@@ -1,7 +1,11 @@
 package unusual.spending.model;
 
+import unusual.spending.CategoryPaymentsMapping;
+
 import java.time.Month;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -13,21 +17,19 @@ public class Payments {
         this.paymentList = paymentList;
     }
 
-    public Set<Category> categoriesUsedInMonth(Month month) {
-        return Stream.of(this.categoryToPaymentsMapping(month)).flatMap(map -> map.keySet().stream()).collect(Collectors.toSet());
+    public void add(Payment payment) {
+        this.paymentList.add(payment);
     }
 
-    public Map<Category, Payments> categoryToPaymentsMapping(Month month) {
-        HashMap<Category, Payments> categoryPaymentsMapping = new HashMap<>();
+    public Set<Category> categoriesPaidIn(Month month) {
+        return this.categoryToPaymentsMapping(month).categoriesSet();
+    }
+
+    public CategoryPaymentsMapping categoryToPaymentsMapping(Month month) {
         Payments monthPayments = totalPaymentsMadeIn(month);
+        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
         for (Payment payment : monthPayments.stream().toList()) {
-            if (categoryPaymentsMapping.containsKey(payment.category())) {
-                categoryPaymentsMapping.get(payment.category()).paymentList.add(payment);
-            } else {
-                categoryPaymentsMapping.put(payment.category(), new Payments(new ArrayList<>() {{
-                    add(payment);
-                }}));
-            }
+            categoryPaymentsMapping.addPayment(payment);
         }
         return categoryPaymentsMapping;
     }

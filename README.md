@@ -67,3 +67,8 @@ Payments -> month -> and then categories
 - Payments -> then according to month -> then according to categories
 - We will segregate according to details
 - Payments -> Month -> Categories
+
+Problem
+- Where should Clock class belong?
+- See all payments made in a particular month (Payments stores everything)
+- There has to be a mapper for Category and Payments

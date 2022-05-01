@@ -25,21 +25,17 @@ public class User {
 
     public Map<Category, Double> unusualSpendings() {
         Map<Category, Double> unusualCategoryPrices = new HashMap<>();
-        Set<Category> currentMonthCategories = payments.categoriesUsedInMonth(currentMonth());
-        Set<Category> previousMonthCategories = payments.categoriesUsedInMonth(previousMonth());
+        Set<Category> currentMonthCategories = payments.categoriesPaidIn(currentMonth());
+        Set<Category> previousMonthCategories = payments.categoriesPaidIn(previousMonth());
         Set<Category> categoryIntersection = new HashSet<>(currentMonthCategories);
         categoryIntersection.retainAll(previousMonthCategories);
         if (categoryIntersection.isEmpty()) {
             return Collections.emptyMap();
         }
         for (Category category : currentMonthCategories) {
-            Double currentMonthPrice = payments.categoryToPaymentsMapping(currentMonth()).get(category)
-                    .stream().map(Payment::price)
-                    .reduce(Double::sum).get();
+            Double currentMonthPrice = payments.categoryToPaymentsMapping(currentMonth()).priceForCategory(category);
+            Double previousMonthPrice = payments.categoryToPaymentsMapping(previousMonth()).priceForCategory(category);
 
-            Double previousMonthPrice = payments.categoryToPaymentsMapping(previousMonth()).get(category)
-                    .stream().map(Payment::price)
-                    .reduce(Double::sum).get();
             if ((((currentMonthPrice - previousMonthPrice) * 100) / previousMonthPrice) > 50) {
                 unusualCategoryPrices.put(category, currentMonthPrice);
             }
