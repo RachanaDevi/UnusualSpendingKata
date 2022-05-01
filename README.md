@@ -61,3 +61,9 @@ The Credit Card Company
 - A Payment class which has price, description, cateogy
 - A Category enum class
 - Something which is known as a user which has userId
+- We have Payments which have different categories and then we can segregate into each month
+Payments -> month -> and then categories
+- If you filter payments -> then you do according to categories -> then you have to filter again by month
+- Payments -> then according to month -> then according to categories
+- We will segregate according to details
+- Payments -> Month -> Categories

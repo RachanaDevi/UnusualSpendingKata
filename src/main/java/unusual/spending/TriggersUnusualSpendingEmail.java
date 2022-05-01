@@ -6,7 +6,7 @@ public class TriggersUnusualSpendingEmail {
 
     public void trigger(User user) {
         // sends an email, will add that feature later
-        if (user.hasUnusualSpending()) {
+        if (!user.unusualSpending().isEmpty()) {
             // send email
         }
     }
