@@ -57,12 +57,4 @@ public class CategoryPaymentsMapping {
     public int hashCode() {
         return Objects.hash(categoryPaymentsMap);
     }
-
-    @Override
-    public String
-    toString() {
-        return "CategoryPaymentsMapping{" +
-                "categoryPaymentsMap=" + categoryPaymentsMap +
-                '}';
-    }
 }
