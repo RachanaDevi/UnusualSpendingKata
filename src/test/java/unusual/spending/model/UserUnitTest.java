@@ -1,6 +1,5 @@
 package unusual.spending.model;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import unusual.spending.fixture.MockClock;
 
