@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Month;
 
-class PaymentTest {
+class PaymentUnitTest {
 
     @Test
     void shouldReturnTrueIfPaymentWasMadeInParticularMonth() {

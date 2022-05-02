@@ -13,7 +13,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static unusual.spending.model.Category.*;
 
-class CategoryPaymentsMappingTest {
+class CategoryPaymentsMappingUnitTest {
 
     @Test
     void shouldAddPaymentsAndCreateMapOfCategoryAndPayments() {
