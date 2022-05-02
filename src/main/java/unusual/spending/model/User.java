@@ -30,15 +30,13 @@ public class User {
         CategoryPaymentsMapping currentMonthCategoryPaymentsMapping = payments.categoryToPaymentsMapping(currentMonth());
         CategoryPaymentsMapping previousMonthCategoryPaymentsMapping = payments.categoryToPaymentsMapping(previousMonth());
 
-        Set<Category> currentMonthCategories = currentMonthCategoryPaymentsMapping.categoriesSet();
-        Set<Category> previousMonthCategories = previousMonthCategoryPaymentsMapping.categoriesSet();
-        Set<Category> categoryIntersection = new HashSet<>(currentMonthCategories);
-        categoryIntersection.retainAll(previousMonthCategories);
+        Set<Category> categoryIntersection = new HashSet<>(currentMonthCategoryPaymentsMapping.categoriesSet());
+        categoryIntersection.retainAll(previousMonthCategoryPaymentsMapping.categoriesSet());
 
         if (categoryIntersection.isEmpty()) {
             return Collections.emptyMap();
         }
-        for (Category category : currentMonthCategories) {
+        for (Category category : categoryIntersection) {
             Double currentMonthPrice = currentMonthCategoryPaymentsMapping.priceForCategory(category);
             Double previousMonthPrice = previousMonthCategoryPaymentsMapping.priceForCategory(category);
 
