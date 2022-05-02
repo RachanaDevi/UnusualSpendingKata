@@ -21,10 +21,6 @@ public class Payments {
         this.paymentList.add(payment);
     }
 
-    public Set<Category> categoriesPaidIn(Month month) {
-        return this.categoryToPaymentsMapping(month).categoriesSet();
-    }
-
     public CategoryPaymentsMapping categoryToPaymentsMapping(Month month) {
         Payments monthPayments = totalPaymentsMadeIn(month);
         CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
