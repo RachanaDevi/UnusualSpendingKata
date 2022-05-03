@@ -5,7 +5,10 @@ import unusual.spending.CategoryPaymentsMapping;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class User {
     private final Long id;
@@ -30,15 +33,15 @@ public class User {
         CategoryPaymentsMapping currentMonthCategoryPaymentsMapping = payments.categoryToPaymentsMapping(currentMonth());
         CategoryPaymentsMapping previousMonthCategoryPaymentsMapping = payments.categoryToPaymentsMapping(previousMonth());
 
-        Set<Category> categoryIntersection = new HashSet<>(currentMonthCategoryPaymentsMapping.categoriesSet());
-        categoryIntersection.retainAll(previousMonthCategoryPaymentsMapping.categoriesSet());
+        Set<Category> categoryIntersection = currentMonthCategoryPaymentsMapping.categoryIntersection(previousMonthCategoryPaymentsMapping);
 
         if (categoryIntersection.isEmpty()) {
             return Collections.emptyMap();
         }
+
         for (Category category : categoryIntersection) {
-            Double currentMonthPrice = currentMonthCategoryPaymentsMapping.priceForCategory(category);
-            Double previousMonthPrice = previousMonthCategoryPaymentsMapping.priceForCategory(category);
+            Double currentMonthPrice = currentMonthCategoryPaymentsMapping.totalPriceForCategory(category);
+            Double previousMonthPrice = previousMonthCategoryPaymentsMapping.totalPriceForCategory(category);
 
             if ((((currentMonthPrice - previousMonthPrice) * 100) / previousMonthPrice) > 50) {
                 unusualCategoryPrices.put(category, currentMonthPrice);

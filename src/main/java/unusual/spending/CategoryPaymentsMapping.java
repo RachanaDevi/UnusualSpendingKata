@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CategoryPaymentsMapping {
-
     private final Map<Category, Payments> categoryPaymentsMap;
 
     public CategoryPaymentsMapping() {
@@ -34,15 +33,21 @@ public class CategoryPaymentsMapping {
         }
     }
 
-    public Set<Category> categoriesSet() {
-        return Stream.of(this.categoryPaymentsMap).flatMap(map -> map.keySet().stream()).collect(Collectors.toSet());
-    }
-
-    public Double priceForCategory(Category category) {
+    public Double totalPriceForCategory(Category category) {
         if (!this.categoryPaymentsMap.containsKey(category)) return 0.0;
         return this.categoryPaymentsMap.get(category)
                 .stream().map(Payment::price)
                 .reduce(Double::sum).get();
+    }
+
+    public Set<Category> categoryIntersection(CategoryPaymentsMapping otherCategoryPaymentsMapping) {
+        Set<Category> categoryIntersection = new HashSet<>(this.categoriesSet());
+        categoryIntersection.retainAll(otherCategoryPaymentsMapping.categoriesSet());
+        return categoryIntersection;
+    }
+
+    private Set<Category> categoriesSet() {
+        return Stream.of(this.categoryPaymentsMap).flatMap(map -> map.keySet().stream()).collect(Collectors.toSet());
     }
 
     @Override

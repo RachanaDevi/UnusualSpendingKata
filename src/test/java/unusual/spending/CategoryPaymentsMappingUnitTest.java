@@ -2,6 +2,7 @@ package unusual.spending;
 
 import org.junit.jupiter.api.Test;
 import unusual.spending.fixture.PaymentsFixture;
+import unusual.spending.model.Category;
 import unusual.spending.model.Payment;
 import unusual.spending.model.Payments;
 
@@ -49,23 +50,6 @@ class CategoryPaymentsMappingUnitTest {
         assertEquals(expectedMapping, categoryPaymentsMapping);
     }
 
-    @Test
-    void shouldReturnAllCategoriesPresentAfterPayments() {
-        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
-        categoryPaymentsMapping.addPayment(new Payment(100.0, "description", GOLF, Month.MARCH));
-        categoryPaymentsMapping.addPayment(new Payment(150.0, "description", GOLF, Month.APRIL));
-        categoryPaymentsMapping.addPayment(new Payment(120.0, "description", RESTAURANT, Month.APRIL));
-        categoryPaymentsMapping.addPayment(new Payment(1020.0, "description", ENTERTAINMENT, Month.JUNE));
-
-        assertEquals(Set.of(GOLF, RESTAURANT, ENTERTAINMENT), categoryPaymentsMapping.categoriesSet());
-    }
-
-    @Test
-    void shouldReturnNoCategoriesGivenNoPayments() {
-        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
-
-        assertEquals(Collections.emptySet(), categoryPaymentsMapping.categoriesSet());
-    }
 
     @Test
     void shouldReturnPriceForGivenCategory() {
@@ -75,7 +59,7 @@ class CategoryPaymentsMappingUnitTest {
         categoryPaymentsMapping.addPayment(new Payment(120.0, "description", RESTAURANT, Month.APRIL));
         categoryPaymentsMapping.addPayment(new Payment(1020.0, "description", ENTERTAINMENT, Month.JUNE));
 
-        assertEquals(250.0, categoryPaymentsMapping.priceForCategory(GOLF));
+        assertEquals(250.0, categoryPaymentsMapping.totalPriceForCategory(GOLF));
     }
 
     @Test
@@ -85,6 +69,36 @@ class CategoryPaymentsMappingUnitTest {
         categoryPaymentsMapping.addPayment(new Payment(150.0, "description", GOLF, Month.APRIL));
         categoryPaymentsMapping.addPayment(new Payment(1020.0, "description", ENTERTAINMENT, Month.JUNE));
 
-        assertEquals(0.0, categoryPaymentsMapping.priceForCategory(RESTAURANT));
+        assertEquals(0.0, categoryPaymentsMapping.totalPriceForCategory(RESTAURANT));
+    }
+
+    @Test
+    void shouldReturnCategoryPaymentsMappingWithCommonCategories() {
+        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
+        categoryPaymentsMapping.addPayment(new Payment(100.0, "description", GOLF, Month.MARCH));
+        categoryPaymentsMapping.addPayment(new Payment(100.0, "description", ENTERTAINMENT, Month.MARCH));
+
+        CategoryPaymentsMapping otherCategoryPaymentsMapping = new CategoryPaymentsMapping();
+        otherCategoryPaymentsMapping.addPayment(new Payment(150.0, "description", GOLF, Month.APRIL));
+        otherCategoryPaymentsMapping.addPayment(new Payment(150.0, "description", RESTAURANT, Month.APRIL));
+
+        Set<Category> expectedCategorySet = Set.of(GOLF);
+
+        Set<Category> categoryIntersection = categoryPaymentsMapping.categoryIntersection(otherCategoryPaymentsMapping);
+
+        assertThat(categoryIntersection).isEqualTo(expectedCategorySet);
+    }
+
+    @Test
+    void shouldReturnEmptyCategoryPaymentsMappingWithNoCommonCategories() {
+        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
+        categoryPaymentsMapping.addPayment(new Payment(100.0, "description", ENTERTAINMENT, Month.MARCH));
+
+        CategoryPaymentsMapping otherCategoryPaymentsMapping = new CategoryPaymentsMapping();
+        otherCategoryPaymentsMapping.addPayment(new Payment(150.0, "description", RESTAURANT, Month.APRIL));
+
+        Set<Category> categoryPaymentsMappingIntersection = categoryPaymentsMapping.categoryIntersection(otherCategoryPaymentsMapping);
+
+        assertThat(categoryPaymentsMappingIntersection).isEqualTo(Collections.emptySet());
     }
 }
