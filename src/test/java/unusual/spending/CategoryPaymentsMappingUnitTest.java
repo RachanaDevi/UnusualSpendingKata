@@ -1,15 +1,16 @@
 package unusual.spending;
 
 import org.junit.jupiter.api.Test;
+import unusual.spending.fixture.PaymentsFixture;
 import unusual.spending.model.Payment;
 import unusual.spending.model.Payments;
 
 import java.time.Month;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static unusual.spending.model.Category.*;
 
@@ -22,15 +23,21 @@ class CategoryPaymentsMappingUnitTest {
         categoryPaymentsMapping.addPayment(new Payment(150.0, "description", GOLF, Month.APRIL));
         categoryPaymentsMapping.addPayment(new Payment(120.0, "description", RESTAURANT, Month.APRIL));
 
-        Payments golfPayments = new Payments(List.of(new Payment(100.0, "description", GOLF, Month.MARCH),
-                new Payment(150.0, "description", GOLF, Month.APRIL)));
-        Payments restaurantPayments = new Payments(List.of(new Payment(120.0, "description", RESTAURANT, Month.APRIL)));
+        Payments golfPayments = PaymentsFixture.categoryWise(GOLF)
+                .monthAndPrice(Month.MARCH, 100.0)
+                .monthAndPrice(Month.APRIL, 150.0)
+                .payments();
+
+        Payments restaurantPayments = PaymentsFixture.categoryWise(RESTAURANT)
+                .monthAndPrice(Month.APRIL, 120.0)
+                .payments();
+
         CategoryPaymentsMapping expectedMapping = CategoryPaymentsMapping.from(Map.of(
                 GOLF, golfPayments,
                 RESTAURANT, restaurantPayments)
         );
 
-        assertEquals(expectedMapping, categoryPaymentsMapping);
+        assertThat(categoryPaymentsMapping).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedMapping);
     }
 
     @Test

@@ -3,6 +3,7 @@ package unusual.spending.model;
 import unusual.spending.CategoryPaymentsMapping;
 
 import java.time.Month;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -18,6 +19,12 @@ public class Payments {
 
     public void add(Payment payment) {
         this.paymentList.add(payment);
+    }
+
+    public Payments addAll(Payments payments){
+        List<Payment> allPayments = new ArrayList<>(this.paymentList);
+        allPayments.addAll(payments.paymentList);
+        return new Payments(allPayments);
     }
 
     public CategoryPaymentsMapping categoryToPaymentsMapping(Month month) {
@@ -52,5 +59,12 @@ public class Payments {
     @Override
     public int hashCode() {
         return Objects.hash(paymentList);
+    }
+
+    @Override
+    public String toString() {
+        return "Payments{" +
+                "paymentList=" + paymentList +
+                '}';
     }
 }
