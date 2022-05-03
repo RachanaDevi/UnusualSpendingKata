@@ -61,10 +61,4 @@ public class Payments {
         return Objects.hash(paymentList);
     }
 
-    @Override
-    public String toString() {
-        return "Payments{" +
-                "paymentList=" + paymentList +
-                '}';
-    }
 }
