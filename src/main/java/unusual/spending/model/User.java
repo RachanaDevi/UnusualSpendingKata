@@ -5,7 +5,6 @@ import unusual.spending.CategoryPaymentsMapping;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -29,16 +28,17 @@ public class User {
     }
 
     public Map<Category, Double> unusualSpendings() {
-        Map<Category, Double> unusualCategoryPrices = new HashMap<>();
         CategoryPaymentsMapping currentMonthCategoryPaymentsMapping = payments.categoryToPaymentsMapping(currentMonth());
         CategoryPaymentsMapping previousMonthCategoryPaymentsMapping = payments.categoryToPaymentsMapping(previousMonth());
 
+        return unusualSpendingDifferenceBetween(currentMonthCategoryPaymentsMapping, previousMonthCategoryPaymentsMapping);
+    }
+
+    private static Map<Category, Double> unusualSpendingDifferenceBetween(CategoryPaymentsMapping currentMonthCategoryPaymentsMapping,
+                                                                          CategoryPaymentsMapping previousMonthCategoryPaymentsMapping
+    ) {
         Set<Category> categoryIntersection = currentMonthCategoryPaymentsMapping.categoryIntersection(previousMonthCategoryPaymentsMapping);
-
-        if (categoryIntersection.isEmpty()) {
-            return Collections.emptyMap();
-        }
-
+        Map<Category, Double> unusualCategoryPrices = new HashMap<>();
         for (Category category : categoryIntersection) {
             Double currentMonthPrice = currentMonthCategoryPaymentsMapping.totalPriceForCategory(category);
             Double previousMonthPrice = previousMonthCategoryPaymentsMapping.totalPriceForCategory(category);
