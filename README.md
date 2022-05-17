@@ -10,7 +10,7 @@ set up to import the third-party dependencies needed by the kata and defined in
 ```
 .
 ├── README.md
-├── pom.xml
+├── pom.xmls
 ├── src
 │   ├── main
 │   │   └── java
@@ -72,3 +72,12 @@ Problem
 - Where should Clock class belong?
 - See all payments made in a particular month (Payments stores everything)
 - There has to be a mapper for Category and Payments
+- CurrentMonthPayments and PreviousMonthPayments doesn't seem to give much value
+- Not sure who is supposed to know about the unusualSpending of the user
+- Opinion on CategoryPaymentsMapping
+  - Abstraction over the map
+- About where the method for calculating UnusualSpending belongs to
+- Question while designing
+  - Mapping of Category -> Month
+  - Mapping of Category -> Payments
+- Later on a Price abstraction 

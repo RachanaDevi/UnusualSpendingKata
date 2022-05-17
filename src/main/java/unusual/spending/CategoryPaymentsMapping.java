@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CategoryPaymentsMapping {
+    private static final int FIFTY_PERCENT = 50;
     private final Map<Category, Payments> categoryPaymentsMap;
 
     public CategoryPaymentsMapping() {
@@ -38,6 +39,23 @@ public class CategoryPaymentsMapping {
         return this.categoryPaymentsMap.get(category)
                 .stream().map(Payment::price)
                 .reduce(Double::sum).get();
+    }
+
+    public Map<Category, Double> unusualSpendingsComparedWith(CategoryPaymentsMapping otherCategoryPaymentsMapping) {
+        Set<Category> categoryIntersection = this.categoryIntersection(otherCategoryPaymentsMapping);
+        Map<Category, Double> unusualCategoryPrices = new HashMap<>();
+        for (Category category : categoryIntersection) {
+            Double currentMonthPrice = this.totalPriceForCategory(category);
+            Double previousMonthPrice = otherCategoryPaymentsMapping.totalPriceForCategory(category);
+            if (percentageDifferenceOf(currentMonthPrice, previousMonthPrice) > FIFTY_PERCENT) {
+                unusualCategoryPrices.put(category, currentMonthPrice);
+            }
+        }
+        return unusualCategoryPrices;
+    }
+
+    private double percentageDifferenceOf(Double currentMonthPrice, Double previousMonthPrice) {
+        return ((currentMonthPrice - previousMonthPrice) * 100) / previousMonthPrice;
     }
 
     public Set<Category> categoryIntersection(CategoryPaymentsMapping otherCategoryPaymentsMapping) {
