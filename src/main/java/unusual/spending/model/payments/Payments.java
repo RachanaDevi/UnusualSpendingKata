@@ -72,11 +72,4 @@ public class Payments {
     public int hashCode() {
         return Objects.hash(paymentList);
     }
-
-    @Override
-    public String toString() {
-        return "Payments{" +
-                "paymentList=" + paymentList +
-                '}';
-    }
 }
