@@ -14,7 +14,7 @@ public class User {
         this.payments = payments;
     }
 
-    public Map<Category, Double> unusualSpendings() {
+    public Map<Category, Price> unusualSpendings() {
         CategoryPaymentsMapping currentMonthCategoryPaymentsMapping = payments.currentMonthPayments().categoryToPaymentsMapping();
         CategoryPaymentsMapping previousMonthCategoryPaymentsMapping = payments.previousMonthPayments().categoryToPaymentsMapping();
 

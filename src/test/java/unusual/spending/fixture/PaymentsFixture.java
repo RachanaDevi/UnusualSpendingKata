@@ -2,6 +2,7 @@ package unusual.spending.fixture;
 
 import unusual.spending.model.Category;
 import unusual.spending.model.Payment;
+import unusual.spending.model.Price;
 import unusual.spending.model.payments.Payments;
 
 import java.time.Month;
@@ -30,7 +31,7 @@ public class PaymentsFixture {
         return new PaymentsFixture();
     }
 
-    public PaymentsFixture addPayment(Double price, Category category, Month month) {
+    public PaymentsFixture addPayment(Price price, Category category, Month month) {
         this.payments.add(new Payment(price, this.description, category, month));
         return this;
     }
@@ -49,7 +50,7 @@ public class PaymentsFixture {
 
     public static class PaymentsMonthFixture {
         private final Month month;
-        private final Map<Category, List<Double>> categoryPriceMap;
+        private final Map<Category, List<Price>> categoryPriceMap;
         private final String description;
 
         private PaymentsMonthFixture(Month month) {
@@ -58,7 +59,7 @@ public class PaymentsFixture {
             this.description = "description";
         }
 
-        public PaymentsMonthFixture priceAndCategory(Category category, Double price) {
+        public PaymentsMonthFixture priceAndCategory(Category category, Price price) {
             if (!categoryPriceMap.containsKey(category)) {
                 categoryPriceMap.put(category, new ArrayList<>() {{
                     add(price);
@@ -84,7 +85,7 @@ public class PaymentsFixture {
 
     public static class PaymentsCategoryFixture {
         private final Category category;
-        private final Map<Month, List<Double>> monthPriceMap;
+        private final Map<Month, List<Price>> monthPriceMap;
         private final String description;
 
         public PaymentsCategoryFixture(Category category) {
@@ -93,7 +94,7 @@ public class PaymentsFixture {
             this.category = category;
         }
 
-        public PaymentsCategoryFixture monthAndPrice(Month month, Double price) {
+        public PaymentsCategoryFixture monthAndPrice(Month month, Price price) {
             if (!monthPriceMap.containsKey(month)) {
                 monthPriceMap.put(month, new ArrayList<>() {{
                     add(price);

@@ -5,12 +5,12 @@ import java.util.Objects;
 
 public class Payment {
 
-    private final Double price;
+    private final Price price;
     private final String description;
     private final Category category;
     private final Month month;
 
-    public Payment(Double price,
+    public Payment(Price price,
                    String description,
                    Category category,
                    Month month) {
@@ -24,7 +24,7 @@ public class Payment {
         return this.month.equals(month);
     }
 
-    public Double price() {
+    public Price price() {
         return price;
     }
 

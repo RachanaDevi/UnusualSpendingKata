@@ -2,6 +2,7 @@ package unusual.spending;
 
 import unusual.spending.model.Category;
 import unusual.spending.model.Payment;
+import unusual.spending.model.Price;
 import unusual.spending.model.payments.Payments;
 
 import java.util.*;
@@ -34,28 +35,24 @@ public class CategoryPaymentsMapping {
         }
     }
 
-    public Double totalPriceForCategory(Category category) {
-        if (!this.categoryPaymentsMap.containsKey(category)) return 0.0;
+    public Price totalPriceForCategory(Category category) {
+        if (!this.categoryPaymentsMap.containsKey(category)) return Price.zero();
         return this.categoryPaymentsMap.get(category)
                 .stream().map(Payment::price)
-                .reduce(Double::sum).get();
+                .reduce(Price::add).get();
     }
 
-    public Map<Category, Double> unusualSpendingsComparedWith(CategoryPaymentsMapping otherCategoryPaymentsMapping) {
+    public Map<Category, Price> unusualSpendingsComparedWith(CategoryPaymentsMapping otherCategoryPaymentsMapping) {
         Set<Category> categoryIntersection = this.categoryIntersection(otherCategoryPaymentsMapping);
-        Map<Category, Double> unusualCategoryPrices = new HashMap<>();
+        Map<Category, Price> unusualCategoryPrices = new HashMap<>();
         for (Category category : categoryIntersection) {
-            Double currentMonthPrice = this.totalPriceForCategory(category);
-            Double previousMonthPrice = otherCategoryPaymentsMapping.totalPriceForCategory(category);
-            if (percentageDifferenceOf(currentMonthPrice, previousMonthPrice) > FIFTY_PERCENT) {
+            Price currentMonthPrice = this.totalPriceForCategory(category);
+            Price previousMonthPrice = otherCategoryPaymentsMapping.totalPriceForCategory(category);
+            if (currentMonthPrice.percentageDifferenceWith(previousMonthPrice) > FIFTY_PERCENT) {
                 unusualCategoryPrices.put(category, currentMonthPrice);
             }
         }
         return unusualCategoryPrices;
-    }
-
-    private double percentageDifferenceOf(Double currentMonthPrice, Double previousMonthPrice) {
-        return ((currentMonthPrice - previousMonthPrice) * 100) / previousMonthPrice;
     }
 
     public Set<Category> categoryIntersection(CategoryPaymentsMapping otherCategoryPaymentsMapping) {
