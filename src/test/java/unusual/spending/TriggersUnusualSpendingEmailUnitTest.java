@@ -3,7 +3,7 @@ package unusual.spending;
 import org.junit.jupiter.api.Test;
 import unusual.spending.model.Category;
 import unusual.spending.model.Payment;
-import unusual.spending.model.Payments;
+import unusual.spending.model.payments.Payments;
 import unusual.spending.model.User;
 
 import java.time.Month;

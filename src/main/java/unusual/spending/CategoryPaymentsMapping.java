@@ -2,7 +2,7 @@ package unusual.spending;
 
 import unusual.spending.model.Category;
 import unusual.spending.model.Payment;
-import unusual.spending.model.Payments;
+import unusual.spending.model.payments.Payments;
 
 import java.util.*;
 import java.util.stream.Collectors;

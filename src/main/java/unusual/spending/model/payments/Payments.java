@@ -1,6 +1,7 @@
-package unusual.spending.model;
+package unusual.spending.model.payments;
 
 import unusual.spending.CategoryPaymentsMapping;
+import unusual.spending.model.Payment;
 
 import java.time.Month;
 import java.util.ArrayList;
@@ -17,20 +18,23 @@ public class Payments {
         this.paymentList = paymentList;
     }
 
+    protected Payments(Payments payments) {
+        this.paymentList = payments.stream().collect(Collectors.toList());
+    }
+
     public void add(Payment payment) {
         this.paymentList.add(payment);
     }
 
-    public Payments addAll(Payments payments){
+    public Payments addAll(Payments payments) {
         List<Payment> allPayments = new ArrayList<>(this.paymentList);
         allPayments.addAll(payments.paymentList);
         return new Payments(allPayments);
     }
 
-    public CategoryPaymentsMapping categoryToPaymentsMapping(Month month) {
-        Payments monthPayments = totalPaymentsMadeIn(month);
+    public CategoryPaymentsMapping categoryToPaymentsMapping() {
         CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
-        for (Payment payment : monthPayments.stream().toList()) {
+        for (Payment payment : this.paymentList) {
             categoryPaymentsMapping.addPayment(payment);
         }
         return categoryPaymentsMapping;
@@ -40,12 +44,20 @@ public class Payments {
         return this.paymentList.stream();
     }
 
-    private Payments totalPaymentsMadeIn(Month currentMonth) {
+    public Payments totalPaymentsMadeIn(Month currentMonth) {
         List<Payment> paymentsMadeInMonth = paymentList
                 .stream()
                 .filter(payment -> payment.madeInMonth(currentMonth))
                 .collect(Collectors.toList());
         return new Payments(paymentsMadeInMonth);
+    }
+
+    public CurrentMonthPayments currentMonthPayments() {
+        return new CurrentMonthPayments(this);
+    }
+
+    public PreviousMonthPayments previousMonthPayments() {
+        return new PreviousMonthPayments(this);
     }
 
     @Override
@@ -61,4 +73,10 @@ public class Payments {
         return Objects.hash(paymentList);
     }
 
+    @Override
+    public String toString() {
+        return "Payments{" +
+                "paymentList=" + paymentList +
+                '}';
+    }
 }

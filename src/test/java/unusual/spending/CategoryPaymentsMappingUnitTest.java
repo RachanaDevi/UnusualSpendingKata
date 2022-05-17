@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import unusual.spending.fixture.PaymentsFixture;
 import unusual.spending.model.Category;
 import unusual.spending.model.Payment;
-import unusual.spending.model.Payments;
+import unusual.spending.model.payments.Payments;
 
 import java.time.Month;
 import java.util.Collections;
