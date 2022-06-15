@@ -9,20 +9,20 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class CategoryPaymentsMapping {
+public class CategoryPayments {
     private static final int FIFTY_PERCENT = 50;
     private final Map<Category, Payments> categoryPaymentsMap;
 
-    public CategoryPaymentsMapping() {
+    public CategoryPayments() {
         categoryPaymentsMap = new HashMap<>();
     }
 
-    private CategoryPaymentsMapping(Map<Category, Payments> categoryPaymentsMap) {
+    private CategoryPayments(Map<Category, Payments> categoryPaymentsMap) {
         this.categoryPaymentsMap = categoryPaymentsMap;
     }
 
-    public static CategoryPaymentsMapping from(Map<Category, Payments> categoryPaymentsMap) {
-        return new CategoryPaymentsMapping(categoryPaymentsMap);
+    public static CategoryPayments from(Map<Category, Payments> categoryPaymentsMap) {
+        return new CategoryPayments(categoryPaymentsMap);
     }
 
     public void addPayment(Payment payment) {
@@ -41,13 +41,17 @@ public class CategoryPaymentsMapping {
                 .stream().map(Payment::price)
                 .reduce(Price::add).get();
     }
-
-    public Map<Category, Price> unusualSpendingsComparedWith(CategoryPaymentsMapping otherCategoryPaymentsMapping) {
-        Set<Category> categoryIntersection = this.categoryIntersection(otherCategoryPaymentsMapping);
+/*
+1. better name for fifty_
+2. UnusualSpending().among(a, b) -> Map<Category, Price>
+3. UnusualSpending.of(a, b)      -> UnusualSpending
+ */
+    public Map<Category, Price> unusualSpendingsComparedWith(CategoryPayments otherCategoryPayments) {
+        Set<Category> categoryIntersection = this.categoryIntersection(otherCategoryPayments);
         Map<Category, Price> unusualCategoryPrices = new HashMap<>();
         for (Category category : categoryIntersection) {
             Price currentMonthPrice = this.totalPriceForCategory(category);
-            Price previousMonthPrice = otherCategoryPaymentsMapping.totalPriceForCategory(category);
+            Price previousMonthPrice = otherCategoryPayments.totalPriceForCategory(category);
             if (currentMonthPrice.percentageDifferenceWith(previousMonthPrice) > FIFTY_PERCENT) {
                 unusualCategoryPrices.put(category, currentMonthPrice);
             }
@@ -55,9 +59,9 @@ public class CategoryPaymentsMapping {
         return unusualCategoryPrices;
     }
 
-    public Set<Category> categoryIntersection(CategoryPaymentsMapping otherCategoryPaymentsMapping) {
+    public Set<Category> categoryIntersection(CategoryPayments otherCategoryPayments) {
         Set<Category> categoryIntersection = new HashSet<>(this.categoriesSet());
-        categoryIntersection.retainAll(otherCategoryPaymentsMapping.categoriesSet());
+        categoryIntersection.retainAll(otherCategoryPayments.categoriesSet());
         return categoryIntersection;
     }
 
@@ -69,7 +73,7 @@ public class CategoryPaymentsMapping {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CategoryPaymentsMapping that = (CategoryPaymentsMapping) o;
+        CategoryPayments that = (CategoryPayments) o;
         return Objects.equals(categoryPaymentsMap, that.categoryPaymentsMap);
     }
 

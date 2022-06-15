@@ -1,6 +1,6 @@
 package unusual.spending.model.payments;
 
-import unusual.spending.CategoryPaymentsMapping;
+import unusual.spending.CategoryPayments;
 import unusual.spending.model.Payment;
 
 import java.time.Month;
@@ -32,12 +32,12 @@ public class Payments {
         return new Payments(allPayments);
     }
 
-    public CategoryPaymentsMapping categoryToPaymentsMapping() {
-        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
+    public CategoryPayments categoryToPaymentsMapping() {
+        CategoryPayments categoryPayments = new CategoryPayments();
         for (Payment payment : this.paymentList) {
-            categoryPaymentsMapping.addPayment(payment);
+            categoryPayments.addPayment(payment);
         }
-        return categoryPaymentsMapping;
+        return categoryPayments;
     }
 
     public Stream<Payment> stream() {

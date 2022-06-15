@@ -1,6 +1,6 @@
 package unusual.spending.model;
 
-import unusual.spending.CategoryPaymentsMapping;
+import unusual.spending.CategoryPayments;
 import unusual.spending.model.payments.Payments;
 
 import java.util.Map;
@@ -15,9 +15,9 @@ public class User {
     }
 
     public Map<Category, Price> unusualSpendings() {
-        CategoryPaymentsMapping currentMonthCategoryPaymentsMapping = payments.currentMonthPayments().categoryToPaymentsMapping();
-        CategoryPaymentsMapping previousMonthCategoryPaymentsMapping = payments.previousMonthPayments().categoryToPaymentsMapping();
+        CategoryPayments currentMonthCategoryPayments = payments.currentMonthPayments().categoryToPaymentsMapping();
+        CategoryPayments previousMonthCategoryPayments = payments.previousMonthPayments().categoryToPaymentsMapping();
 
-        return currentMonthCategoryPaymentsMapping.unusualSpendingsComparedWith(previousMonthCategoryPaymentsMapping);
+        return currentMonthCategoryPayments.unusualSpendingsComparedWith(previousMonthCategoryPayments);
     }
 }

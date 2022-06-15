@@ -1,7 +1,7 @@
 package unusual.spending.model.payments;
 
 import org.junit.jupiter.api.Test;
-import unusual.spending.CategoryPaymentsMapping;
+import unusual.spending.CategoryPayments;
 import unusual.spending.fixture.PaymentsFixture;
 import unusual.spending.model.Category;
 import unusual.spending.model.Payment;
@@ -45,7 +45,7 @@ class PaymentsUnitTest {
                 Category.RESTAURANT, PaymentsFixture.categoryWise(Category.RESTAURANT).monthAndPrice(Month.APRIL, Price.from(250.0)).payments(),
                 Category.ENTERTAINMENT, PaymentsFixture.categoryWise(Category.ENTERTAINMENT).monthAndPrice(Month.APRIL, Price.from(200.0)).payments()
         );
-        assertThat(CategoryPaymentsMapping.from(expectedCategoryPaymentsMapping))
+        assertThat(CategoryPayments.from(expectedCategoryPaymentsMapping))
                 .usingRecursiveComparison()
                 .ignoringCollectionOrder()
                 .isEqualTo(allPayments.categoryToPaymentsMapping());
@@ -56,7 +56,7 @@ class PaymentsUnitTest {
         Payments otherMonthsPayments = PaymentsFixture.categoryWise(Category.GOLF)
                 .payments();
 
-        assertEquals(CategoryPaymentsMapping.from(Collections.emptyMap()), otherMonthsPayments.categoryToPaymentsMapping());
+        assertEquals(CategoryPayments.from(Collections.emptyMap()), otherMonthsPayments.categoryToPaymentsMapping());
     }
 
     @Test

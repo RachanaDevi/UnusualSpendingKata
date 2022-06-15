@@ -1,7 +1,7 @@
 package unusual.spending.model.payments;
 
 import org.junit.jupiter.api.Test;
-import unusual.spending.CategoryPaymentsMapping;
+import unusual.spending.CategoryPayments;
 import unusual.spending.fixture.MockClock;
 import unusual.spending.fixture.PaymentsFixture;
 import unusual.spending.model.Category;
@@ -59,7 +59,7 @@ class CurrentMonthPaymentsUnitTest {
         Payments allPayments = previousMonthPayments.addAll(currentMonthPayments);
         CurrentMonthPayments actualCurrentMonthPayments = new CurrentMonthPayments(allPayments, mockClock);
 
-        CategoryPaymentsMapping expectedCategoryPaymentsMapping = CategoryPaymentsMapping.from(Map.of(
+        CategoryPayments expectedCategoryPayments = CategoryPayments.from(Map.of(
                 Category.GOLF, PaymentsFixture.categoryWise(Category.GOLF).monthAndPrice(Month.APRIL, Price.from(160.0)).monthAndPrice(Month.APRIL, Price.from(150.0)).payments(),
                 Category.RESTAURANT, PaymentsFixture.categoryWise(Category.RESTAURANT).monthAndPrice(Month.APRIL, Price.from(250.0)).payments(),
                 Category.ENTERTAINMENT, PaymentsFixture.categoryWise(Category.ENTERTAINMENT).monthAndPrice(Month.APRIL, Price.from(200.0)).payments())
@@ -68,7 +68,7 @@ class CurrentMonthPaymentsUnitTest {
         assertThat(actualCurrentMonthPayments.categoryToPaymentsMapping())
                 .usingRecursiveComparison()
                 .ignoringCollectionOrder()
-                .isEqualTo(expectedCategoryPaymentsMapping);
+                .isEqualTo(expectedCategoryPayments);
     }
 
     @Test

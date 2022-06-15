@@ -23,14 +23,14 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static unusual.spending.model.Category.*;
 
-class CategoryPaymentsMappingUnitTest {
+class CategoryPaymentsUnitTest {
 
     @Test
     void shouldAddPaymentsAndCreateMapOfCategoryAndPayments() {
-        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(100.0), "description", GOLF, Month.MARCH));
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(150.0), "description", GOLF, Month.APRIL));
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(120.0), "description", RESTAURANT, Month.APRIL));
+        CategoryPayments categoryPayments = new CategoryPayments();
+        categoryPayments.addPayment(new Payment(Price.from(100.0), "description", GOLF, Month.MARCH));
+        categoryPayments.addPayment(new Payment(Price.from(150.0), "description", GOLF, Month.APRIL));
+        categoryPayments.addPayment(new Payment(Price.from(120.0), "description", RESTAURANT, Month.APRIL));
 
         Payments golfPayments = PaymentsFixture.categoryWise(GOLF)
                 .monthAndPrice(Month.MARCH, Price.from(100.0))
@@ -41,71 +41,71 @@ class CategoryPaymentsMappingUnitTest {
                 .monthAndPrice(Month.APRIL, Price.from(120.0))
                 .payments();
 
-        CategoryPaymentsMapping expectedMapping = CategoryPaymentsMapping.from(Map.of(
+        CategoryPayments expectedMapping = CategoryPayments.from(Map.of(
                 GOLF, golfPayments,
                 RESTAURANT, restaurantPayments)
         );
 
-        assertThat(categoryPaymentsMapping).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedMapping);
+        assertThat(categoryPayments).usingRecursiveComparison().ignoringCollectionOrder().isEqualTo(expectedMapping);
     }
 
     @Test
     void shouldReturnEmptyCategoryPaymentsMapGivenNoPaymentsWereMade() {
-        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
+        CategoryPayments categoryPayments = new CategoryPayments();
 
-        CategoryPaymentsMapping expectedMapping = CategoryPaymentsMapping.from(Collections.emptyMap());
+        CategoryPayments expectedMapping = CategoryPayments.from(Collections.emptyMap());
 
-        assertEquals(expectedMapping, categoryPaymentsMapping);
+        assertEquals(expectedMapping, categoryPayments);
     }
 
 
     @Test
     void shouldReturnPriceForGivenCategory() {
-        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(100.0), "description", GOLF, Month.MARCH));
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(150.0), "description", GOLF, Month.APRIL));
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(120.0), "description", RESTAURANT, Month.APRIL));
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(1020.0), "description", ENTERTAINMENT, Month.JUNE));
+        CategoryPayments categoryPayments = new CategoryPayments();
+        categoryPayments.addPayment(new Payment(Price.from(100.0), "description", GOLF, Month.MARCH));
+        categoryPayments.addPayment(new Payment(Price.from(150.0), "description", GOLF, Month.APRIL));
+        categoryPayments.addPayment(new Payment(Price.from(120.0), "description", RESTAURANT, Month.APRIL));
+        categoryPayments.addPayment(new Payment(Price.from(1020.0), "description", ENTERTAINMENT, Month.JUNE));
 
-        assertEquals(Price.from(250.0), categoryPaymentsMapping.totalPriceForCategory(GOLF));
+        assertEquals(Price.from(250.0), categoryPayments.totalPriceForCategory(GOLF));
     }
 
     @Test
     void shouldReturnPriceAsZeroIfCategoryIsNotPresent() {
-        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(100.0), "description", GOLF, Month.MARCH));
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(150.0), "description", GOLF, Month.APRIL));
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(1020.0), "description", ENTERTAINMENT, Month.JUNE));
+        CategoryPayments categoryPayments = new CategoryPayments();
+        categoryPayments.addPayment(new Payment(Price.from(100.0), "description", GOLF, Month.MARCH));
+        categoryPayments.addPayment(new Payment(Price.from(150.0), "description", GOLF, Month.APRIL));
+        categoryPayments.addPayment(new Payment(Price.from(1020.0), "description", ENTERTAINMENT, Month.JUNE));
 
-        assertEquals(Price.zero(), categoryPaymentsMapping.totalPriceForCategory(RESTAURANT));
+        assertEquals(Price.zero(), categoryPayments.totalPriceForCategory(RESTAURANT));
     }
 
     @Test
     void shouldReturnCategoryPaymentsMappingWithCommonCategories() {
-        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(100.0), "description", GOLF, Month.MARCH));
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(100.0), "description", ENTERTAINMENT, Month.MARCH));
+        CategoryPayments categoryPayments = new CategoryPayments();
+        categoryPayments.addPayment(new Payment(Price.from(100.0), "description", GOLF, Month.MARCH));
+        categoryPayments.addPayment(new Payment(Price.from(100.0), "description", ENTERTAINMENT, Month.MARCH));
 
-        CategoryPaymentsMapping otherCategoryPaymentsMapping = new CategoryPaymentsMapping();
-        otherCategoryPaymentsMapping.addPayment(new Payment(Price.from(150.0), "description", GOLF, Month.APRIL));
-        otherCategoryPaymentsMapping.addPayment(new Payment(Price.from(150.0), "description", RESTAURANT, Month.APRIL));
+        CategoryPayments otherCategoryPayments = new CategoryPayments();
+        otherCategoryPayments.addPayment(new Payment(Price.from(150.0), "description", GOLF, Month.APRIL));
+        otherCategoryPayments.addPayment(new Payment(Price.from(150.0), "description", RESTAURANT, Month.APRIL));
 
         Set<Category> expectedCategorySet = Set.of(GOLF);
 
-        Set<Category> categoryIntersection = categoryPaymentsMapping.categoryIntersection(otherCategoryPaymentsMapping);
+        Set<Category> categoryIntersection = categoryPayments.categoryIntersection(otherCategoryPayments);
 
         assertThat(categoryIntersection).isEqualTo(expectedCategorySet);
     }
 
     @Test
     void shouldReturnEmptyCategoryPaymentsMappingWithNoCommonCategories() {
-        CategoryPaymentsMapping categoryPaymentsMapping = new CategoryPaymentsMapping();
-        categoryPaymentsMapping.addPayment(new Payment(Price.from(100.0), "description", ENTERTAINMENT, Month.MARCH));
+        CategoryPayments categoryPayments = new CategoryPayments();
+        categoryPayments.addPayment(new Payment(Price.from(100.0), "description", ENTERTAINMENT, Month.MARCH));
 
-        CategoryPaymentsMapping otherCategoryPaymentsMapping = new CategoryPaymentsMapping();
-        otherCategoryPaymentsMapping.addPayment(new Payment(Price.from(150.0), "description", RESTAURANT, Month.APRIL));
+        CategoryPayments otherCategoryPayments = new CategoryPayments();
+        otherCategoryPayments.addPayment(new Payment(Price.from(150.0), "description", RESTAURANT, Month.APRIL));
 
-        Set<Category> categoryPaymentsMappingIntersection = categoryPaymentsMapping.categoryIntersection(otherCategoryPaymentsMapping);
+        Set<Category> categoryPaymentsMappingIntersection = categoryPayments.categoryIntersection(otherCategoryPayments);
 
         assertThat(categoryPaymentsMappingIntersection).isEqualTo(Collections.emptySet());
     }
@@ -127,11 +127,11 @@ class CategoryPaymentsMappingUnitTest {
                 .addPayment(Price.from(1060.0), Category.ENTERTAINMENT, Month.APRIL)
                 .payments(), mockClock);
 
-        CategoryPaymentsMapping categoryPaymentsMapping = currentMonthPayments.categoryToPaymentsMapping();
-        CategoryPaymentsMapping otherCategoryPaymentsMapping = previousMonthPayments.categoryToPaymentsMapping();
+        CategoryPayments categoryPayments = currentMonthPayments.categoryToPaymentsMapping();
+        CategoryPayments otherCategoryPayments = previousMonthPayments.categoryToPaymentsMapping();
 
         assertEquals(Map.of(Category.GOLF, Price.from(1060.0), Category.ENTERTAINMENT, Price.from(1060.0), Category.RESTAURANT, Price.from(1570.0)),
-                categoryPaymentsMapping.unusualSpendingsComparedWith(otherCategoryPaymentsMapping));
+                categoryPayments.unusualSpendingsComparedWith(otherCategoryPayments));
     }
 
     @Test
@@ -144,10 +144,10 @@ class CategoryPaymentsMappingUnitTest {
                 .addPayment(Price.from(5.0), Category.GOLF, Month.APRIL).payments(), mockClock);
 
 
-        CategoryPaymentsMapping categoryPaymentsMapping = currentMonthPayments.categoryToPaymentsMapping();
-        CategoryPaymentsMapping otherCategoryPaymentsMapping = previousMonthPayments.categoryToPaymentsMapping();
+        CategoryPayments categoryPayments = currentMonthPayments.categoryToPaymentsMapping();
+        CategoryPayments otherCategoryPayments = previousMonthPayments.categoryToPaymentsMapping();
 
-        assertEquals(Collections.emptyMap(), categoryPaymentsMapping.unusualSpendingsComparedWith(otherCategoryPaymentsMapping));
+        assertEquals(Collections.emptyMap(), categoryPayments.unusualSpendingsComparedWith(otherCategoryPayments));
     }
 
     @Test
