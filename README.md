@@ -81,3 +81,22 @@ Problem
   - Mapping of Category -> Month
   - Mapping of Category -> Payments
 - Later on a Price abstraction 
+
+Notes:
+- You should question when doing TDD and write down notes what you want visit later on, 
+- You need to give the responsibility to someone else to create the previous month and current month
+  - Payments made in a month is the only responsibility of Payments class
+- Your fixture is complicated and difficult to use
+- Check how you can do TDD better, eg: your tests should only show what is required, any description, any category should be used if the given 
+  categories in the test are not the highlight
+- The unusualSpending behaviour does not belong to category mapping so it should have an abstraction UnusualSpending Map<Category,Price>
+- Avoid classes having suffix of the data structure, i.e List, Mapping, Map. The class internally should know about it. 
+- Have the behaviour of Payments made somewhere else
+- Payment is rather a transaction when it has category involved.
+-     PaymentsFixture.forGolf()
+                .with(m1, price1...)
+                .with(m2, price2...)
+
+  PaymentsFixture.forMonth(APRIL)
+  .forGolf(Price...)
+  .forEntertainment(...)
